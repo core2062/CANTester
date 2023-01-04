@@ -66,7 +66,11 @@ namespace CANTester
             bool useFxFwd = true;
             CTRE.Phoenix.MotorControl.CAN.TalonFX fxRev;
             bool useFxRev = true;
-            
+
+            /*
+             * Wait a bit for the FalconFX MC's to start up
+             */
+            System.Threading.Thread.Sleep(1000);
             talonFwd = new CTRE.Phoenix.MotorControl.CAN.TalonSRX(0);
             talonFwd.IsFwdLimitSwitchClosed();
             if (talonFwd.GetLastError() != 0)
@@ -83,7 +87,7 @@ namespace CANTester
                 Debug.Print("useTalonRev is " + useTalonRev);
             }
 
-            fxFwd = new CTRE.Phoenix.MotorControl.CAN.TalonFX(2);
+            fxFwd = new CTRE.Phoenix.MotorControl.CAN.TalonFX(10);
             fxFwd.IsFwdLimitSwitchClosed();
             if (fxFwd.GetLastError() != 0)
             {
@@ -91,7 +95,7 @@ namespace CANTester
                 Debug.Print("useFxFwd is " + useFxFwd);
             }
 
-            fxRev = new CTRE.Phoenix.MotorControl.CAN.TalonFX(3);
+            fxRev = new CTRE.Phoenix.MotorControl.CAN.TalonFX(11);
             fxRev.IsFwdLimitSwitchClosed();
             if (fxRev.GetLastError() != 0)
             {
@@ -108,7 +112,7 @@ namespace CANTester
                 labelSafetyMsg.SetColor(DisplayModule.Color.Green);
                 labelTalon.SetText("Talon 0/1: " + useTalonFwd + "/" + useTalonRev);
                 labelTalon.SetColor(DisplayModule.Color.Green);
-                labelFx.SetText("Fx 0/1: " + useFxFwd + "/" + useFxRev);
+                labelFx.SetText("Fx 10/11: " + useFxFwd + "/" + useFxRev);
                 labelFx.SetColor(DisplayModule.Color.Green);
                 /* Make sure the gamecontroller is still connected */
                 if (myGamepad.GetConnectionStatus() == CTRE.Phoenix.UsbDeviceConnection.Connected)
@@ -219,11 +223,11 @@ namespace CANTester
                 }
                 if (useFxFwd)
                 {
-                    fxFwd.Set(CTRE.Phoenix.MotorControl.ControlMode.PercentOutput, motorSpeed);
+                    fxFwd.Set(CTRE.Phoenix.MotorControl.ControlMode.PercentOutput, -motorSpeed);
                 }
                 if (useFxRev)
                 {
-                    fxRev.Set(CTRE.Phoenix.MotorControl.ControlMode.PercentOutput, -motorSpeed);
+                    fxRev.Set(CTRE.Phoenix.MotorControl.ControlMode.PercentOutput, motorSpeed);
                 }
                 CTRE.Phoenix.Watchdog.Feed();
 
